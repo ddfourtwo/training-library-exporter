@@ -1,0 +1,59 @@
+/**
+ * TabNavigation component
+ *
+ * Provides tab navigation between Workout Libraries and the Plans Library.
+ */
+
+import type { ReactElement } from 'react';
+
+export type TabType = 'libraries' | 'plans';
+
+export interface TabNavigationProps {
+  activeTab: TabType;
+  onTabChange: (tab: TabType) => void;
+}
+
+export function TabNavigation({
+  activeTab,
+  onTabChange,
+}: TabNavigationProps): ReactElement {
+  const handleTabClick = (tab: TabType): void => {
+    // Don't trigger change if clicking on already active tab
+    if (tab === activeTab) {
+      return;
+    }
+    onTabChange(tab);
+  };
+
+  const getTabClassName = (tab: TabType): string => {
+    const baseClasses =
+      'flex-1 min-w-0 px-3 py-2 text-sm font-medium border-b-2 transition-colors rounded-t-md whitespace-nowrap text-center';
+    const activeClasses =
+      tab === activeTab
+        ? 'border-blue-500 text-blue-600 bg-blue-100'
+        : 'border-gray-300 text-gray-600 bg-gray-100 hover:text-gray-900 hover:bg-gray-200';
+    return `${baseClasses} ${activeClasses}`;
+  };
+
+  return (
+    <div className="flex w-full gap-1 border-b border-gray-200" role="tablist">
+      <button
+        role="button"
+        aria-selected={activeTab === 'libraries'}
+        className={getTabClassName('libraries')}
+        onClick={() => handleTabClick('libraries')}
+      >
+        Workout Libraries
+      </button>
+
+      <button
+        role="button"
+        aria-selected={activeTab === 'plans'}
+        className={getTabClassName('plans')}
+        onClick={() => handleTabClick('plans')}
+      >
+        Plans Library
+      </button>
+    </div>
+  );
+}

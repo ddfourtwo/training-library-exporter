@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Training Library Exporter",
+  "short_name": "Library Exporter",
+  "version": "1.0.0",
+  "description": "Download your TrainingPeaks workout libraries and training plans to one JSON file",
+  "permissions": ["storage", "tabs"],
+  "host_permissions": [
+    "https://tpapi.trainingpeaks.com/*",
+    "https://tpapi.sandbox.trainingpeaks.com/*",
+    "https://app.trainingpeaks.com/*",
+    "https://app.sandbox.trainingpeaks.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/index.ts",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://app.trainingpeaks.com/*",
+        "https://app.sandbox.trainingpeaks.com/*"
+      ],
+      "js": ["src/content/mainWorldInterceptor.ts"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://app.trainingpeaks.com/*",
+        "https://app.sandbox.trainingpeaks.com/*"
+      ],
+      "js": ["src/content/isolatedWorldBridge.ts"],
+      "run_at": "document_start",
+      "world": "ISOLATED"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Installation and Usage Guide
+    url: https://github.com/ddfourtwo/training-library-exporter/blob/HEAD/INSTALL.md
+    about: Read the install and first-use guide before opening a support issue.
+  - name: Privacy and Permissions
+    url: https://github.com/ddfourtwo/training-library-exporter/blob/HEAD/docs/PRIVACY_AND_PERMISSIONS.md
+    about: Review data flow and permission details before filing privacy questions.
+  - name: Security Reporting
+    url: https://github.com/ddfourtwo/training-library-exporter/blob/HEAD/SECURITY.md
+    about: Follow the security reporting instructions for sensitive issues.

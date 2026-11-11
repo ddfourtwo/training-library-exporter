@@ -1,0 +1,62 @@
+[
+  {
+    "workoutId": 5001,
+    "athleteId": 9,
+    "title": "Endurance 2h",
+    "workoutTypeValueId": 2,
+    "workoutDay": "2024-03-06T00:00:00",
+    "orderOnDay": 1,
+    "description": "Steady aerobic ride",
+    "coachComments": "Fuel every 30 min",
+    "workoutComments": "Felt strong",
+    "tssPlanned": 110,
+    "ifPlanned": 0.72,
+    "totalTimePlanned": 2,
+    "distancePlanned": null,
+    "structure": {
+      "structure": [{ "type": "step", "length": { "unit": "second", "value": 7200 } }],
+      "primaryLengthMetric": "duration",
+      "primaryIntensityMetric": "percentOfFtp",
+      "polyline": [
+        [0, 0.72],
+        [7200, 0.72]
+      ]
+    },
+    "lastModifiedDate": "2024-02-01T00:00:00",
+    "someNewField": { "a": [1, { "b": null }] }
+  },
+  {
+    "workoutId": 5002,
+    "athleteId": 9,
+    "title": "Endurance 2h",
+    "workoutTypeValueId": 2,
+    "workoutDay": "2024-03-06T00:00:00",
+    "orderOnDay": 2,
+    "description": "Second session",
+    "coachComments": null,
+    "workoutComments": null,
+    "tssPlanned": 60,
+    "ifPlanned": 0.65,
+    "totalTimePlanned": 1,
+    "distancePlanned": null,
+    "structure": null,
+    "lastModifiedDate": "2024-02-01T00:00:00"
+  },
+  {
+    "workoutId": 5003,
+    "athleteId": 9,
+    "title": "Rest",
+    "workoutTypeValueId": 1,
+    "workoutDay": "2024-03-13T00:00:00",
+    "orderOnDay": 1,
+    "description": null,
+    "coachComments": null,
+    "workoutComments": null,
+    "tssPlanned": 0,
+    "ifPlanned": null,
+    "totalTimePlanned": 0,
+    "distancePlanned": null,
+    "structure": null,
+    "lastModifiedDate": "2024-02-01T00:00:00"
+  }
+]

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ddfourtwo/training-library-exporter/main/schema/training-library-export.schema.json",
+  "title": "Training library export",
+  "description": "One file holding a coach's TrainingPeaks workout libraries and training plans, written by the Training Library Exporter browser extension (format \"training-library-export\", version 1). Workout payloads inside are TrainingPeaks API rows, kept exactly as the API returned them; a reader maps them with its own TrainingPeaks mapping. A reader MUST reject a file whose `format` or `version` it does not implement rather than guess.",
+  "type": "object",
+  "required": ["format", "version", "exported_at", "libraries", "plans"],
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "description": "Identifier of this file format. Fixed.",
+      "const": "training-library-export"
+    },
+    "version": {
+      "description": "Revision of the envelope. Bumped only for a breaking change; a reader implements the versions it knows.",
+      "const": 1
+    },
+    "exported_at": {
+      "description": "When the file was written, ISO-8601 UTC instant.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "libraries": {
+      "description": "Every workout library the coach exported, in the order they were selected.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/library" }
+    },
+    "plans": {
+      "description": "Every training plan the coach exported, in the order they were selected.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/plan" }
+    }
+  },
+  "$defs": {
+    "library": {
+      "type": "object",
+      "required": ["library", "items"],
+      "additionalProperties": false,
+      "properties": {
+        "library": {
+          "description": "Identity of the library, so a reader can group the items it creates into one folder and recognise a repeat export of the same library.",
+          "type": "object",
+          "required": ["id", "name"],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "description": "TrainingPeaks exerciseLibraryId.",
+              "type": "integer"
+            },
+            "name": {
+              "description": "TrainingPeaks library name.",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "items": {
+          "description": "Raw rows from /exerciselibrary/v2/libraries/{id}/items, unmodified.",
+          "type": "array",
+          "items": true
+        }
+      }
+    },
+    "plan": {
+      "type": "object",
+      "required": ["plan", "workouts", "notes", "plan_first_day"],
+      "additionalProperties": false,
+      "properties": {
+        "plan": {
+          "description": "The raw plan row from /plans/v1/plansWithAccess whose planId this entry is for, unmodified.",
+          "type": "object"
+        },
+        "workouts": {
+          "description": "Raw rows from /plans/v1/plans/{id}/workouts/{start}/{end}, unmodified.",
+          "type": "array",
+          "items": true
+        },
+        "notes": {
+          "description": "Raw rows from /plans/v1/plans/{id}/calendarNote/{start}/{end}, unmodified.",
+          "type": "array",
+          "items": true
+        },
+        "plan_first_day": {
+          "description": "Earliest `workoutDay` (YYYY-MM-DD) across the whole plan, or null when no workout carries a usable date. Not TrainingPeaks data: a plan is a sequence of weeks relative to its own first day, and a reader that stores plans on absolute dates needs this anchor to shift them to the week 1 the coach chooses at import time.",
+          "type": ["string", "null"],
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        }
+      }
+    }
+  }
+}

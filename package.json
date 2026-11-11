@@ -1,0 +1,91 @@
+{
+  "name": "training-library-exporter",
+  "version": "1.0.0",
+  "description": "Training Library Exporter \u2014 download your TrainingPeaks workout libraries and training plans to one JSON file",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run build:bundle",
+    "build:bundle": "tsc && vite build",
+    "build:prod": "npm run build:bundle",
+    "package": "npm run build && ./scripts/package-for-distribution.sh",
+    "package:release": "npm run build:bundle && ./scripts/package-release-artifact.sh",
+    "preview": "vite preview",
+    "lint": "eslint . --max-warnings 20",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "test": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:components": "vitest run tests/components",
+    "test:e2e": "playwright test",
+    "coverage": "vitest run --coverage",
+    "prepare": "husky",
+    "test:schema": "vitest run tests/unit/export/schema.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ddfourtwo/training-library-exporter.git"
+  },
+  "keywords": [
+    "chrome-extension",
+    "trainingpeaks",
+    "cycling",
+    "workout"
+  ],
+  "author": "Daniel du Four",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "bugs": {
+    "url": "https://github.com/ddfourtwo/training-library-exporter/issues"
+  },
+  "homepage": "https://github.com/ddfourtwo/training-library-exporter#readme",
+  "dependencies": {
+    "@crxjs/vite-plugin": "^2.7.0",
+    "@floating-ui/react": "^0.27.18",
+    "@tanstack/react-query": "^5.90.21",
+    "lucide-react": "^0.575.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.2.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.1.0",
+    "zod": "^4.3.6",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
+    "@eslint/js": "^9.39.2",
+    "@playwright/test": "^1.58.2",
+    "@tailwindcss/postcss": "^4.2.0",
+    "@tanstack/react-query-devtools": "^5.91.3",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/chrome": "^0.1.36",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.56.0",
+    "@typescript-eslint/parser": "^8.56.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "@vitest/coverage-v8": "^4.1.8",
+    "@vitest/ui": "^4.1.8",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "autoprefixer": "^10.4.24",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.0",
+    "globals": "^17.3.0",
+    "husky": "^9.1.7",
+    "jsdom": "^28.1.0",
+    "lint-staged": "^16.2.7",
+    "playwright": "^1.58.2",
+    "postcss": "^8.5.26",
+    "prettier": "^3.8.1",
+    "typescript-eslint": "^8.56.0",
+    "vitest": "^4.1.11"
+  }
+}

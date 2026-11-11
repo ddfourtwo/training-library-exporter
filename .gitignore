@@ -1,0 +1,54 @@
+# IDE and editor files
+.history/
+.vscode/
+.idea/
+
+# Claude Code local (per-developer) settings
+.claude/settings.local.json
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Distribution packages
+training-library-exporter-*.zip
+
+# Environment files
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+.tmp/
+
+# Test coverage
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package manager
+.npm
+.yarn
+
+# Playwright
+test-results/
+playwright-report/
+
+# Misc
+*.swp
+*.swo
+*~
+
+# Test/example data
+workout_examples/

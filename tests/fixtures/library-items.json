@@ -1,0 +1,59 @@
+[
+  {
+    "exerciseLibraryItemId": 9001,
+    "itemName": "3x12 min threshold",
+    "workoutTypeId": 2,
+    "workoutTypeValueId": 2,
+    "totalTimePlanned": 1.25,
+    "tssPlanned": 78,
+    "ifPlanned": 0.88,
+    "distancePlanned": null,
+    "coachComments": "Keep cadence 90+",
+    "structure": {
+      "structure": [
+        {
+          "type": "repetition",
+          "reps": 3,
+          "steps": [
+            { "type": "step", "length": { "unit": "second", "value": 720 } },
+            { "type": "step", "length": { "unit": "second", "value": 180 } }
+          ]
+        }
+      ],
+      "primaryLengthMetric": "duration",
+      "primaryIntensityMetric": "percentOfFtp",
+      "polyline": [
+        [0, 0.4],
+        [720, 0.88],
+        [900, 0.4]
+      ]
+    },
+    "lastModifiedDate": "2024-02-01T09:30:00"
+  },
+  {
+    "exerciseLibraryItemId": 9002,
+    "itemName": "Squat day",
+    "workoutTypeId": 9,
+    "workoutTypeValueId": 9,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "ifPlanned": null,
+    "distancePlanned": null,
+    "coachComments": null,
+    "structure": null,
+    "lastModifiedDate": "2024-02-01T09:30:00"
+  },
+  {
+    "exerciseLibraryItemId": 9003,
+    "itemName": "Easy spin",
+    "workoutTypeId": 2,
+    "workoutTypeValueId": 2,
+    "totalTimePlanned": 1,
+    "tssPlanned": 30,
+    "ifPlanned": 0.6,
+    "distancePlanned": null,
+    "coachComments": null,
+    "structure": null,
+    "lastModifiedDate": "2024-02-01T09:30:00"
+  }
+]

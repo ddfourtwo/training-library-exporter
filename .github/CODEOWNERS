@@ -1,0 +1,10 @@
+# Default owner for everything
+* @ddfourtwo
+
+# Security-sensitive paths require explicit review
+src/background/ @ddfourtwo
+src/content/ @ddfourtwo
+src/services/authService.ts @ddfourtwo
+src/services/storageService.ts @ddfourtwo
+public/manifest.json @ddfourtwo
+.github/workflows/ @ddfourtwo

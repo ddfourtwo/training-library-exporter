@@ -1,0 +1,151 @@
+name: Release Artifact
+
+# A requested version is merged through a checked PR before being released.
+# Keep tagging and publishing together: bot tag pushes do not trigger workflows.
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      new_version:
+        description: 'New version: patch, minor, major, or X.Y.Z; blank publishes current main'
+        type: string
+        required: false
+      expected_version:
+        description: 'Optional guard: must match the version being released'
+        type: string
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+  checks: read
+
+concurrency:
+  group: release-${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' && 'main' || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: true
+      HUSKY: 0
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          # A dispatched release tags main; a tag push builds that tag.
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' && 'main' || github.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Resolve and validate release request
+        id: version
+        env:
+          NEW_VERSION: ${{ inputs.new_version }}
+          EXPECTED_VERSION: ${{ inputs.expected_version }}
+        run: |
+          if [ "$GITHUB_REF_TYPE" = tag ]; then
+            if [ -n "$NEW_VERSION" ]; then
+              echo 'Leave new_version blank when publishing an existing tag.' >&2
+              exit 1
+            fi
+            VERSION=$(node scripts/release-version.cjs resolve '' "${GITHUB_REF_NAME#v}")
+            node scripts/release-version.cjs resolve '' "$EXPECTED_VERSION"
+          else
+            if [ "$GITHUB_REF" != refs/heads/main ]; then
+              echo 'Run Release Artifact from main.' >&2
+              exit 1
+            fi
+            VERSION=$(node scripts/release-version.cjs resolve "$NEW_VERSION" "$EXPECTED_VERSION")
+          fi
+          git fetch --tags origin
+          if [ "$GITHUB_REF_TYPE" != tag ] && git show-ref --verify --quiet "refs/tags/v$VERSION"; then
+            echo "v$VERSION already exists. Set new_version to patch, minor, major, or a higher X.Y.Z." >&2
+            exit 1
+          fi
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Releasing $VERSION"
+
+      - name: Create, validate, and merge version PR
+        if: github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' && inputs.new_version != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ steps.version.outputs.value }}
+        run: ./scripts/prepare-release-pr.sh
+
+      - name: Verify release checkout
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.value }}
+        run: node scripts/release-version.cjs resolve '' "$RELEASE_VERSION"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run type-check
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Build production bundle
+        run: npm run build:bundle
+
+      # Tagged only after the checks pass, so a failing release leaves no tag
+      # behind to find and delete.
+      - name: Tag the release
+        if: github.event_name == 'workflow_dispatch' && github.ref_type != 'tag'
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          VERSION="$RELEASE_VERSION"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git tag -a "v${VERSION}" -m "v${VERSION}"
+          git push origin "v${VERSION}"
+
+      - name: Package canonical release artifact
+        id: package
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          VERSION="$RELEASE_VERSION"
+          ARTIFACT="training-library-exporter-webstore-v${VERSION}.zip"
+          ./scripts/package-release-artifact.sh "$VERSION" "$ARTIFACT"
+          sha256sum "$ARTIFACT" > "${ARTIFACT}.sha256"
+          echo "artifact_name=$ARTIFACT" >> "$GITHUB_OUTPUT"
+          echo "artifact_path=$ARTIFACT" >> "$GITHUB_OUTPUT"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-web-store-package-${{ steps.version.outputs.value }}
+          path: |
+            ${{ steps.package.outputs.artifact_path }}
+            ${{ steps.package.outputs.artifact_path }}.sha256
+
+      - name: Publish GitHub release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          # Named explicitly: on a dispatched run the workflow is not triggered
+          # by the tag, so the action cannot infer it.
+          tag_name: v${{ steps.version.outputs.value }}
+          files: |
+            ${{ steps.package.outputs.artifact_path }}
+            ${{ steps.package.outputs.artifact_path }}.sha256
+          generate_release_notes: true
