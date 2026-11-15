@@ -15,11 +15,7 @@ import { useTrainingPlans } from '@/hooks/useTrainingPlans';
 import { useLibraryExport } from '@/hooks/useLibraryExport';
 import { LoadingSpinner } from './LoadingSpinner';
 import { CalendarWeekRow } from './CalendarWeekRow';
-import {
-  ExportDialog,
-  ExportResultPanel,
-  ExportButton,
-} from './export';
+import { ExportDialog, ExportResultPanel, ExportButton } from './export';
 import {
   findEarliestDate,
   normalizeToMonday,
@@ -470,7 +466,7 @@ export function PlanCalendar({
             onClick={openDialog}
             disabled={isExporting}
             variant="secondary"
-            label={isExporting ? 'Importing…' : 'Import Plan'}
+            label={isExporting ? 'Exporting…' : 'Export Plan'}
             title="Export training plan to a file"
           />
           <button

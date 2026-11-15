@@ -128,6 +128,9 @@ jobs:
           ARTIFACT="training-library-exporter-webstore-v${VERSION}.zip"
           ./scripts/package-release-artifact.sh "$VERSION" "$ARTIFACT"
           sha256sum "$ARTIFACT" > "${ARTIFACT}.sha256"
+          # Unversioned copy: the install page links releases/latest/download/
+          # training-library-exporter.zip, which must not change name per release.
+          cp "$ARTIFACT" training-library-exporter.zip
           echo "artifact_name=$ARTIFACT" >> "$GITHUB_OUTPUT"
           echo "artifact_path=$ARTIFACT" >> "$GITHUB_OUTPUT"
 
@@ -148,4 +151,5 @@ jobs:
           files: |
             ${{ steps.package.outputs.artifact_path }}
             ${{ steps.package.outputs.artifact_path }}.sha256
+            training-library-exporter.zip
           generate_release_notes: true

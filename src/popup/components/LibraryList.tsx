@@ -101,13 +101,11 @@ export function LibraryList({
     openDialog();
   };
 
-  const selectedSources: ExportSource[] = selectedLibraries.map(
-    (lib) => ({
-      kind: 'library',
-      id: lib.exerciseLibraryId,
-      name: lib.libraryName,
-    })
-  );
+  const selectedSources: ExportSource[] = selectedLibraries.map((lib) => ({
+    kind: 'library',
+    id: lib.exerciseLibraryId,
+    name: lib.libraryName,
+  }));
 
   const handleConfirmExport = (): void => {
     if (selectedSources.length === 0) return;
@@ -271,7 +269,7 @@ export function LibraryList({
                   d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
                 />
               </svg>
-              Import{' '}
+              Export{' '}
               {selectedLibraryIds.size > 0 ? `${selectedLibraryIds.size} ` : ''}
               {selectedLibraryIds.size === 1 ? 'Library' : 'Libraries'}
             </button>
